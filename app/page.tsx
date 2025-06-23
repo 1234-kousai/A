@@ -1,8 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Moon, Sun, Menu, X, ExternalLink, Instagram, Mail, ChevronDown } from "lucide-react"
 import { useTheme } from "next-themes"
@@ -36,6 +34,31 @@ export default function Portfolio() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Scroll reveal animation
+  useEffect(() => {
+    if (!mounted) return
+
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed')
+        }
+      })
+    }, observerOptions)
+
+    const elements = document.querySelectorAll('.scroll-reveal')
+    elements.forEach((el) => observer.observe(el))
+
+    return () => {
+      elements.forEach((el) => observer.unobserve(el))
+    }
+  }, [mounted])
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => 
@@ -68,7 +91,7 @@ export default function Portfolio() {
       {/* Header */}
       <header
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          scrollY > 50 ? "bg-background/80 backdrop-blur-md border-b" : "bg-transparent"
+          scrollY > 50 ? "glass border-b" : "bg-transparent"
         }`}
       >
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -90,19 +113,19 @@ export default function Portfolio() {
             <button onClick={() => scrollToSection("sns")} className="hover:text-primary transition-colors">
               SNS
             </button>
-            <Button variant="ghost" size="icon" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+            <button className="p-2 rounded-lg hover:bg-muted/80 transition-colors" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
+            </button>
           </nav>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-2">
-            <Button variant="ghost" size="icon" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+            <button className="p-2 rounded-lg hover:bg-muted/80 transition-colors" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
-            <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            </button>
+            <button className="p-2 rounded-lg hover:bg-muted/80 transition-colors" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -171,27 +194,26 @@ export default function Portfolio() {
             <p>Faith United 所属モデル</p>
           </div>
 
-          <Button
-            size="lg"
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg animate-slide-up-delay-2"
+          <button
+            className="pro-button text-white px-8 py-3 text-lg animate-slide-up-delay-2 relative z-10"
             onClick={() => scrollToSection("business")}
           >
             詳しく見る
             <ChevronDown className="ml-2 h-5 w-5" />
-          </Button>
+          </button>
         </div>
       </section>
 
       {/* Business & Community Section */}
-      <section id="business" className="py-20 bg-muted/30">
+      <section id="business" className="py-20 bg-muted/30 scroll-reveal">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Business & Community
           </h2>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <CardContent className="p-8">
+            <div className="pro-card group">
+              <div className="p-8">
                 <div className="mb-6">
                   <Image
                     src="/Luminous Core.png"
@@ -216,11 +238,11 @@ export default function Portfolio() {
                 >
                   ウェブサイトを見る <ExternalLink className="ml-1 h-4 w-4" />
                 </Link>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <CardContent className="p-8">
+            <div className="pro-card group">
+              <div className="p-8">
                 <div className="mb-6">
                   <Image
                     src="/StuDXIA.jpg"
@@ -245,14 +267,14 @@ export default function Portfolio() {
                 >
                   ウェブサイトを見る <ExternalLink className="ml-1 h-4 w-4" />
                 </Link>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* More about me Section */}
-      <section id="about" className="py-20">
+      <section id="about" className="py-20 scroll-reveal">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             More about me
@@ -301,15 +323,15 @@ export default function Portfolio() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20 bg-muted/30">
+      <section id="projects" className="py-20 bg-muted/30 scroll-reveal">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Projects & Activities
           </h2>
 
           <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <CardContent className="p-6">
+            <div className="pro-card group scroll-reveal">
+              <div className="p-6">
                 <Image
                   src="/system.png"
                   alt="AI Development"
@@ -319,11 +341,11 @@ export default function Portfolio() {
                 />
                 <h3 className="text-xl font-bold mb-2">AI システム開発</h3>
                 <p className="text-muted-foreground">クライアント向けのオーダーメイドAIシステム・ツールの開発</p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <CardContent className="p-6">
+            <div className="pro-card group scroll-reveal">
+              <div className="p-6">
                 <Image
                   src="/SNS.png"
                   alt="SNS Growth"
@@ -333,11 +355,11 @@ export default function Portfolio() {
                 />
                 <h3 className="text-xl font-bold mb-2">SNS グロース戦略</h3>
                 <p className="text-muted-foreground">AIを活用したSNSアカウントの運用代行とグロース戦略</p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <CardContent className="p-6">
+            <div className="pro-card group scroll-reveal">
+              <div className="p-6">
                 <Image
                   src="/game.png"
                   alt="Game Development"
@@ -347,11 +369,11 @@ export default function Portfolio() {
                 />
                 <h3 className="text-xl font-bold mb-2">ゲーム開発</h3>
                 <p className="text-muted-foreground">AIが物語を織りなす、新しいメタバース体験。最終ビジョン「アニメワールド」に向けた、最初の世界のMVPを開発しています。</p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <CardContent className="p-6">
+            <div className="pro-card group scroll-reveal">
+              <div className="p-6">
                 <Image
                   src="/model.png"
                   alt="Model & Cosplay Activity"
@@ -361,14 +383,14 @@ export default function Portfolio() {
                 />
                 <h3 className="text-xl font-bold mb-2">表現活動：モデル / コスプレ</h3>
                 <p className="text-muted-foreground">モデル・コスプレの活動もしています！アニメ大好きです！！</p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Creative & SNS Section */}
-      <section id="sns" className="py-20">
+      <section id="sns" className="py-20 scroll-reveal">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Creative & SNS
@@ -399,7 +421,7 @@ export default function Portfolio() {
               <Link
                 href="https://www.instagram.com/kousai_ai_?igsh=bzBuNjFpODZjbWph&utm_source=qr"
                 target="_blank"
-                className="inline-flex items-center space-x-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
+                className="pro-button inline-flex items-center space-x-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-4 rounded-full text-lg font-semibold relative z-10"
               >
                 <Instagram className="h-6 w-6" />
                 <span>Instagram をフォロー</span>
