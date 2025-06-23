@@ -16,12 +16,46 @@ export default function Portfolio() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrollY, setScrollY] = useState(0)
   const [mounted, setMounted] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
+
+  const aboutMeImages = [
+    "/more about me1.JPG",
+    "/more about me2.JPG",
+    "/more about me3.jpeg",
+    "/more about me4.JPG"
+  ]
+
+  const snsVideos = [
+    "/SNS1.mov",
+    "/SNS2.mov"
+  ]
 
   useEffect(() => {
     setMounted(true)
     const handleScroll = () => setScrollY(window.scrollY)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === aboutMeImages.length - 1 ? 0 : prevIndex + 1
+      )
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentVideoIndex((prevIndex) => 
+        prevIndex === snsVideos.length - 1 ? 0 : prevIndex + 1
+      )
+    }, 3000)
+
+    return () => clearInterval(interval)
   }, [])
 
   const scrollToSection = (id: string) => {
@@ -57,9 +91,6 @@ export default function Portfolio() {
             </button>
             <button onClick={() => scrollToSection("sns")} className="hover:text-primary transition-colors">
               SNS
-            </button>
-            <button onClick={() => scrollToSection("contact")} className="hover:text-primary transition-colors">
-              Contact
             </button>
             <Button variant="ghost" size="icon" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -102,12 +133,6 @@ export default function Portfolio() {
               <button onClick={() => scrollToSection("sns")} className="text-left hover:text-primary transition-colors">
                 SNS
               </button>
-              <button
-                onClick={() => scrollToSection("contact")}
-                className="text-left hover:text-primary transition-colors"
-              >
-                Contact
-              </button>
             </nav>
           </div>
         )}
@@ -129,7 +154,7 @@ export default function Portfolio() {
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
           <div className="mb-8 animate-fade-in">
             <Image
-              src="/placeholder.svg?height=200&width=200"
+              src="/Kousai.png"
               alt="山本公才"
               width={200}
               height={200}
@@ -138,7 +163,7 @@ export default function Portfolio() {
           </div>
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-slide-up">
-            AI × グロース戦略で未来を創る
+            山本 公才 / Kousai Yamamoto
           </h1>
 
           <div className="text-lg md:text-xl text-muted-foreground mb-8 space-y-2 animate-slide-up-delay">
@@ -171,7 +196,7 @@ export default function Portfolio() {
               <CardContent className="p-8">
                 <div className="mb-6">
                   <Image
-                    src="/placeholder.svg?height=300&width=400"
+                    src="/Luminous Core.png"
                     alt="Luminous Core"
                     width={400}
                     height={300}
@@ -200,7 +225,7 @@ export default function Portfolio() {
               <CardContent className="p-8">
                 <div className="mb-6">
                   <Image
-                    src="/placeholder.svg?height=300&width=400"
+                    src="/StuDXIA.png"
                     alt="StuDXIA"
                     width={400}
                     height={300}
@@ -237,14 +262,20 @@ export default function Portfolio() {
 
           <div className="max-w-4xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <Image
-                  src="/placeholder.svg?height=500&width=400"
-                  alt="山本公才 プロフィール"
-                  width={400}
-                  height={500}
-                  className="rounded-lg shadow-2xl w-full object-cover"
-                />
+              <div className="relative">
+                {aboutMeImages.map((image, index) => (
+                  <Image
+                    key={index}
+                    src={image}
+                    alt={`山本公才 プロフィール ${index + 1}`}
+                    width={400}
+                    height={500}
+                    className={`rounded-lg shadow-2xl w-full object-cover absolute top-0 left-0 transition-opacity duration-1000 ${
+                      index === currentImageIndex ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                ))}
+                <div className="rounded-lg w-full" style={{paddingBottom: "125%"}}></div>
               </div>
 
               <div className="space-y-6 text-lg leading-relaxed">
@@ -278,11 +309,11 @@ export default function Portfolio() {
             Projects & Activities
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
             <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
               <CardContent className="p-6">
                 <Image
-                  src="/placeholder.svg?height=200&width=300"
+                  src="/system.png"
                   alt="AI Development"
                   width={300}
                   height={200}
@@ -296,7 +327,7 @@ export default function Portfolio() {
             <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
               <CardContent className="p-6">
                 <Image
-                  src="/placeholder.svg?height=200&width=300"
+                  src="/SNS.png"
                   alt="SNS Growth"
                   width={300}
                   height={200}
@@ -310,14 +341,28 @@ export default function Portfolio() {
             <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
               <CardContent className="p-6">
                 <Image
-                  src="/placeholder.svg?height=200&width=300"
+                  src="/game.png"
                   alt="Game Development"
                   width={300}
                   height={200}
                   className="rounded-lg w-full object-cover mb-4"
                 />
                 <h3 className="text-xl font-bold mb-2">ゲーム開発</h3>
-                <p className="text-muted-foreground">趣味で取り組むゲーム開発プロジェクト</p>
+                <p className="text-muted-foreground">AIが物語を織りなす、新しいメタバース体験。最終ビジョン「アニメワールド」に向けた、最初の世界のMVPを開発しています。</p>
+              </CardContent>
+            </Card>
+
+            <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <CardContent className="p-6">
+                <Image
+                  src="/model.png"
+                  alt="Model & Cosplay Activity"
+                  width={300}
+                  height={200}
+                  className="rounded-lg w-full object-cover mb-4"
+                />
+                <h3 className="text-xl font-bold mb-2">表現活動：モデル / コスプレ</h3>
+                <p className="text-muted-foreground">モデル・コスプレの活動もしています！アニメ大好きです！！</p>
               </CardContent>
             </Card>
           </div>
@@ -332,14 +377,21 @@ export default function Portfolio() {
           </h2>
 
           <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-12">
-              <Image
-                src="/placeholder.svg?height=400&width=600"
-                alt="Creative Work"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-2xl mx-auto mb-8"
-              />
+            <div className="mb-12 relative">
+              {snsVideos.map((video, index) => (
+                <video
+                  key={index}
+                  src={video}
+                  autoPlay
+                  loop
+                  muted
+                  className={`rounded-lg shadow-2xl mx-auto mb-8 w-full max-w-2xl object-cover absolute top-0 left-0 transition-opacity duration-1000 ${
+                    index === currentVideoIndex ? "opacity-100" : "opacity-0"
+                  }`}
+                  style={{ aspectRatio: "16/9" }}
+                />
+              ))}
+              <div className="rounded-lg w-full max-w-2xl mx-auto" style={{aspectRatio: "16/9"}}></div>
             </div>
 
             <div className="space-y-6">
@@ -360,50 +412,6 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Contact
-          </h2>
-
-          <div className="max-w-2xl mx-auto">
-            <Card>
-              <CardContent className="p-8">
-                <form className="space-y-6">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-2">
-                      お名前
-                    </label>
-                    <Input id="name" placeholder="山田太郎" />
-                  </div>
-
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-2">
-                      メールアドレス
-                    </label>
-                    <Input id="email" type="email" placeholder="example@email.com" />
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium mb-2">
-                      メッセージ
-                    </label>
-                    <Textarea id="message" placeholder="お気軽にメッセージをお送りください..." rows={5} />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 text-lg"
-                  >
-                    送信する
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="bg-background border-t py-12">
