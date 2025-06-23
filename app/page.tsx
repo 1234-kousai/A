@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Moon, Sun, Menu, X, ExternalLink, Instagram, Mail, ChevronDown } from "lucide-react"
@@ -46,7 +44,7 @@ export default function Portfolio() {
     }, 3000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [aboutMeImages.length])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -56,7 +54,7 @@ export default function Portfolio() {
     }, 3000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [snsVideos.length])
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
@@ -280,7 +278,7 @@ export default function Portfolio() {
 
               <div className="space-y-6 text-lg leading-relaxed">
                 <p>
-                  慶應義塾大学経済学部在籍。金融機関・税理士事務所でのインターン経験や、経理代行事業の起業を通じて、ビジネスや数字の現場に触れ、デジタル分野の可能性を実感。AI・DXを学ぶ中で、創設から1ヶ月で慶應・東大・早稲田・一橋に加え、起業家や専門学生など多様な人材が在籍するデジタル人材育成団体"StuDXIA"を立ち上げ、上場企業やテック企業とも連携。JDLA認定AIジェネラリスト資格と簿記資格を保有。
+                  慶應義塾大学経済学部在籍。金融機関・税理士事務所でのインターン経験や、経理代行事業の起業を通じて、ビジネスや数字の現場に触れ、デジタル分野の可能性を実感。AI・DXを学ぶ中で、創設から1ヶ月で慶應・東大・早稲田・一橋に加え、起業家や専門学生など多様な人材が在籍するデジタル人材育成団体&quot;StuDXIA&quot;を立ち上げ、上場企業やテック企業とも連携。JDLA認定AIジェネラリスト資格と簿記資格を保有。
                 </p>
 
                 <p>
