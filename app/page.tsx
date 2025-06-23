@@ -223,7 +223,7 @@ export default function Portfolio() {
               <CardContent className="p-8">
                 <div className="mb-6">
                   <Image
-                    src="/StuDXIA.png"
+                    src="/StuDXIA.jpg"
                     alt="StuDXIA"
                     width={400}
                     height={300}
